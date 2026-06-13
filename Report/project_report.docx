@@ -1,0 +1,166 @@
+# Data Warehousing & ETL Pipeline for Business Intelligence
+
+## Project Summary
+
+### Objective
+
+The objective of this project was to design and implement an end-to-end ETL (Extract, Transform, Load) pipeline and Data Warehouse solution capable of transforming raw retail business data into a centralized analytics platform.
+
+The project demonstrates how organizations can improve reporting efficiency, data quality, and business decision-making by integrating SQL, Python, and Power BI into a unified Business Intelligence workflow.
+
+---
+
+## Business Problem
+
+Retail organizations often collect data from multiple operational systems, resulting in:
+
+* Inconsistent records
+* Duplicate data
+* Missing values
+* Slow reporting processes
+* Lack of centralized analytics
+
+These issues make it difficult for management to generate reliable business insights and monitor performance effectively.
+
+To address these challenges, a Data Warehouse and ETL Pipeline solution was developed.
+
+---
+
+## Solution Overview
+
+The solution follows a standard ETL architecture:
+
+### Extract
+
+Raw data was collected from:
+
+* Customer Data
+* Product Data
+* Sales Data
+
+### Transform
+
+Data preprocessing activities included:
+
+* Missing value handling
+* Duplicate removal
+* Data validation
+* Data type standardization
+* Revenue calculations
+* Data quality checks
+
+### Load
+
+The cleaned data was loaded into a Data Warehouse using a dimensional model consisting of:
+
+#### Dimension Tables
+
+* DimCustomer
+* DimProduct
+
+#### Fact Table
+
+* FactSales
+
+This structure enables efficient querying and reporting.
+
+---
+
+## Data Warehouse Design
+
+The project uses a Star Schema architecture.
+
+FactSales serves as the central fact table containing transaction-level metrics.
+
+Dimension tables provide descriptive information about customers and products.
+
+This design improves query performance and supports scalable analytics.
+
+---
+
+## Dashboard Development
+
+Power BI was used to create interactive dashboards for business users.
+
+### Store Sales Dashboard
+
+The Store Sales Dashboard provides operational insights into:
+
+* Revenue Performance
+* Order Trends
+* Product Performance
+* Regional Sales Distribution
+* Customer Purchasing Behavior
+
+### Strategy Dashboard
+
+The Strategy Dashboard provides management-level insights into:
+
+* Customer Segmentation
+* Revenue Growth
+* Category Performance
+* Strategic Business Opportunities
+* High-Value Customer Analysis
+
+---
+
+## Key Business Insights
+
+The analysis revealed several important findings:
+
+* A small number of products contribute a significant portion of total revenue.
+* High-performing stores consistently drive overall business growth.
+* Customer purchasing behavior varies across product categories and regions.
+* Strategic analysis highlights opportunities for growth in underperforming areas.
+* Centralized reporting improves decision-making efficiency.
+* Automated ETL processing significantly reduces manual reporting effort.
+
+---
+
+## Tools and Technologies
+
+* SQL
+* Python
+* Pandas
+* NumPy
+* Power BI
+* GitHub
+
+---
+
+## Skills Demonstrated
+
+This project demonstrates practical experience in:
+
+* ETL Pipeline Development
+* Data Warehousing
+* Data Modeling
+* Star Schema Design
+* SQL Development
+* Python Data Processing
+* Business Intelligence
+* KPI Development
+* Dashboard Design
+* Data Visualization
+
+---
+
+## Business Impact
+
+The implementation of the Data Warehouse and ETL Pipeline provides:
+
+* Improved data quality
+* Faster reporting
+* Centralized analytics
+* Better business visibility
+* Enhanced decision-making capabilities
+
+By consolidating data into a single source of truth, organizations can make more informed strategic and operational decisions.
+
+---
+
+## Conclusion
+
+This project successfully demonstrates the complete lifecycle of a modern Business Intelligence solution, from raw data extraction and transformation to warehouse development and dashboard reporting.
+
+The solution provides a scalable foundation for business analytics and highlights the value of ETL pipelines and data warehousing in supporting data-driven decision-making.

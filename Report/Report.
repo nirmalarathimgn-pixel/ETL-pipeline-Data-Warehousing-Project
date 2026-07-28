@@ -1,0 +1,123 @@
+# End-to-End Sales Data Warehouse & ETL Pipeline
+
+**Tech Stack**: SQL Server | Power Query | Power BI | DAX | Star Schema | Data Modeling
+
+---
+
+## Project Summary
+
+Designed and implemented an end-to-end ETL pipeline and Star Schema Data Warehouse for Adventure Works bike sales data. Transformed raw transactional data into a centralized analytics platform to track Revenue, Budget vs Actual, and Customer/Product performance.
+
+The solution reduced reporting time and provided leadership with real-time insights using SQL Server, Power Query, DAX, and Power BI.
+
+---
+
+## Business Problem
+
+The business faced:
+- **Slow Reporting**: Manual Excel reports took hours to consolidate
+- **Data Silos**: Sales, Customer, and Product data were not linked
+- **No Budget Tracking**: Could not compare Actual Revenue vs Budget
+- **Lack of Insights**: No visibility into top customers, cities, or peak sales months
+
+**Solution**: Build a centralized Data Warehouse with automated ETL and interactive BI dashboards.
+
+---
+
+## Solution Overview - ETL Architecture
+
+`Source Data` → `Power Query ETL` → `SQL Server Data Warehouse` → `Power BI Dashboard`
+
+### Extract
+Data extracted from AdventureWorks source: `InternetSales`, `Customers`, `Products`, `Calendar`, `Budget`
+
+### Transform
+Using `Power Query`:
+- Data Cleaning: Removed duplicates, handled nulls
+- Data Type Standardization: `DateKey`, `ProductKey`, `CustomerKey`
+- Created Calculated Columns: `Revenue`, `SalesAmount`
+- Data Quality Checks & Validation
+
+### Load
+Loaded into `SQL Server` using `Star Schema` dimensional model for fast querying.
+
+---
+
+## Data Warehouse Design - Star Schema
+
+Centralized model built for performance and scalability.
+
+#### Fact Tables
+1. `FACT_InternetSales`: Transaction-level metrics like SalesAmount, OrderQuantity, TotalProductCost
+2. `FACT_Budget`: Monthly budget targets by Product and Date
+
+#### Dimension Tables
+1. `DIM_Customers`: Customer demographics, City, State, Country, Gender
+2. `DIM_Products`: Product Name, Category, Subcategory, Color
+3. `DIM_Date`: Date, Month, Quarter, Year for time analysis
+
+**Relationships**: 1-to-Many relationships established between DIM and FACT tables in Model View.
+
+---
+
+## Dashboard Development - Power BI
+
+Built 4 interactive dashboard pages with 15+ visuals and DAX KPIs.
+
+### 1. Sales Overview Dashboard
+- **KPIs**: Total Revenue $6.8M, Total Orders 2K, Avg Selling Price $2,977, Sales/Budget 55.10%
+- **Visuals**: Revenue vs Budget Trend, Revenue by Year, Revenue by Day
+- **Insight**: Peak sales occur in `December`. Revenue is at 55% of budget.
+
+### 2. Customer Details Dashboard
+- **KPIs**: Sales by City, Sales by Gender, Best Sales Day
+- **Visuals**: Top 10 Customers by Sales, Map of Sales by City
+- **Insight**: `London` is the top revenue city. `Top 1 Customer` contributes `12%` of total revenue.
+
+### 3. Product Details Dashboard
+- **KPIs**: Sales by Category, Sales by Subcategory
+- **Visuals**: Product Performance by City, Revenue by Category
+- **Insight**: `Road Bikes` is the highest revenue category at $14.5M
+
+### 4. Insights Page
+Key business takeaways and recommendations for management
+
+---
+
+## Key Business Insights
+
+- **Revenue Gap**: Actual revenue is `55.10%` of budget. Opportunity to increase Q4 marketing.
+- **Customer Concentration**: `12%` of revenue comes from 1 customer. Risk + Upsell opportunity.
+- **Seasonality**: `December` is the peak sales month. Plan inventory accordingly.
+- **Geography**: `London` drives highest revenue. Replicate strategy in other cities.
+- **Product**: `Road Bikes` are the main revenue driver. Focus promotions here.
+
+---
+
+## Tools & Technologies
+
+SQL Server | Power Query | Power BI | DAX | Star Schema | Data Modeling | ETL | GitHub
+
+---
+
+## Skills Demonstrated
+
+ETL Pipeline Development | Data Warehousing | Star Schema Design | SQL Development | Data Cleaning | DAX | Business Intelligence | KPI Development | Dashboard Design | Data Visualization | Storytelling with Data
+
+---
+
+## Business Impact
+
+- **80% Faster Reporting**: Automated dashboard replaced 4-hour manual Excel process
+- **Single Source of Truth**: Centralized data improved data quality and trust
+- **Data-Driven Decisions**: Enabled management to identify top products, customers, and budget gaps
+- **Scalable Foundation**: Star Schema allows easy addition of new data sources
+
+---
+
+## Conclusion
+
+This project demonstrates the full lifecycle of a modern BI solution: from raw data extraction to ETL, Data Warehouse modeling, and executive-level dashboard reporting.
+
+The solution provides a scalable, automated foundation for sales analytics and proves ability to turn raw data into business decisions.
+

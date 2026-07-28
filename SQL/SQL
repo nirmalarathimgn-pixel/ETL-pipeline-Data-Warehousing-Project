@@ -1,0 +1,195 @@
+/***************************************************
+  PROJECT: End-to-End Sales Data Warehouse
+  DATABASE: AdventureWorksDW
+  TABLES: 3 DIM + 2 FACT + VIEWS for KPIs
+***************************************************/
+
+-- STEP 1: CREATE DATABASE
+IF DB_ID('AdventureWorksDW') IS NOT NULL
+    DROP DATABASE AdventureWorksDW;
+GO
+
+CREATE DATABASE AdventureWorksDW;
+GO
+
+USE AdventureWorksDW;
+GO
+
+-- STEP 2: DROP TABLES IF EXISTS - Clean Run ke liye
+DROP TABLE IF EXISTS FACT_InternetSales;
+DROP TABLE IF EXISTS FACT_Budget;
+DROP TABLE IF EXISTS DIM_Customers;
+DROP TABLE IF EXISTS DIM_Products;
+DROP TABLE IF EXISTS DIM_Date;
+GO
+
+-- STEP 3: CREATE DIMENSION TABLES
+PRINT 'Creating Dimension Tables...'
+
+CREATE TABLE DIM_Customers (
+    CustomerKey INT PRIMARY KEY,
+    CustomerID INT NOT NULL,
+    FullName VARCHAR(100),
+    Gender VARCHAR(10),
+    City VARCHAR(50),
+    State VARCHAR(50),
+    Country VARCHAR(50)
+);
+
+CREATE TABLE DIM_Products (
+    ProductKey INT PRIMARY KEY,
+    ProductID INT NOT NULL,
+    ProductName VARCHAR(100),
+    Category VARCHAR(50),
+    SubCategory VARCHAR(50),
+    Color VARCHAR(20)
+);
+
+CREATE TABLE DIM_Date (
+    DateKey INT PRIMARY KEY, -- Format: YYYYMMDD
+    [Date] DATE,
+    [Year] INT,
+    [Month] INT,
+    MonthName VARCHAR(20),
+    Quarter INT,
+    Day INT
+);
+GO
+
+-- STEP 4: CREATE FACT TABLES
+PRINT 'Creating Fact Tables...'
+
+CREATE TABLE FACT_InternetSales (
+    SalesOrderNumber VARCHAR(20) NOT NULL,
+    SalesOrderLineNumber INT NOT NULL,
+    DateKey INT,
+    CustomerKey INT,
+    ProductKey INT,
+    OrderQuantity INT,
+    UnitPrice DECIMAL(12,2),
+    SalesAmount DECIMAL(12,2),
+    TotalProductCost DECIMAL(12,2),
+    CONSTRAINT PK_FACT_InternetSales PRIMARY KEY (SalesOrderNumber, SalesOrderLineNumber)
+);
+
+CREATE TABLE FACT_Budget (
+    BudgetID INT IDENTITY(1,1) PRIMARY KEY,
+    DateKey INT,
+    ProductKey INT,
+    BudgetAmount DECIMAL(12,2)
+);
+GO
+
+-- STEP 5: ADD FOREIGN KEYS / RELATIONSHIPS
+PRINT 'Adding Relationships...'
+
+ALTER TABLE FACT_InternetSales WITH CHECK
+ADD CONSTRAINT FK_FACTSales_DIMDate FOREIGN KEY (DateKey) REFERENCES DIM_Date(DateKey);
+GO
+
+ALTER TABLE FACT_InternetSales WITH CHECK
+ADD CONSTRAINT FK_FACTSales_DIMCustomer FOREIGN KEY (CustomerKey) REFERENCES DIM_Customers(CustomerKey);
+GO
+
+ALTER TABLE FACT_InternetSales WITH CHECK
+ADD CONSTRAINT FK_FACTSales_DIMProduct FOREIGN KEY (ProductKey) REFERENCES DIM_Products(ProductKey);
+GO
+
+ALTER TABLE FACT_Budget WITH CHECK
+ADD CONSTRAINT FK_Budget_DIMDate FOREIGN KEY (DateKey) REFERENCES DIM_Date(DateKey);
+GO
+
+ALTER TABLE FACT_Budget WITH CHECK
+ADD CONSTRAINT FK_Budget_DIMProduct FOREIGN KEY (ProductKey) REFERENCES DIM_Products(ProductKey);
+GO
+
+/***************************************************
+  STEP 6: KPI QUERIES & VIEWS FOR POWER BI
+  Inko Power BI me "Get Data > SQL Query" me daal
+***************************************************/
+
+-- VIEW 1: Core KPIs Dashboard
+CREATE VIEW VW_CoreKPIs AS
+SELECT
+    SUM(SalesAmount) AS TotalRevenue,
+    COUNT(DISTINCT SalesOrderNumber) AS TotalOrders,
+    AVG(SalesAmount) AS AvgSellingPrice
+FROM FACT_InternetSales;
+GO
+
+-- VIEW 2: Sales vs Budget % = 55.10%
+CREATE VIEW VW_SalesVsBudget AS
+SELECT
+    d.[Year],
+    d.MonthName,
+    SUM(f.SalesAmount) AS ActualSales,
+    SUM(b.BudgetAmount) AS Budget,
+    ROUND((SUM(f.SalesAmount) / NULLIF(SUM(b.BudgetAmount),0)) * 100, 2) AS Sales_Budget_Percent
+FROM FACT_InternetSales f
+JOIN FACT_Budget b ON f.DateKey = b.DateKey AND f.ProductKey = b.ProductKey
+JOIN DIM_Date d ON f.DateKey = d.DateKey
+GROUP BY d.[Year], d.MonthName, d.[Month];
+GO
+
+-- VIEW 3: Top 10 Customers = Top 1 = 12%
+CREATE VIEW VW_TopCustomers AS
+SELECT TOP 10
+    c.FullName AS Customer,
+    c.City,
+    SUM(f.SalesAmount) AS TotalSales,
+    ROUND((SUM(f.SalesAmount) / (SELECT SUM(SalesAmount) FROM FACT_InternetSales)) * 100, 2) AS PercentOfTotal
+FROM FACT_InternetSales f
+JOIN DIM_Customers c ON f.CustomerKey = c.CustomerKey
+GROUP BY c.FullName, c.City
+ORDER BY TotalSales DESC;
+GO
+
+-- VIEW 4: Sales by Category = Road Bikes $14.5M
+CREATE VIEW VW_SalesByCategory AS
+SELECT
+    p.Category,
+    p.SubCategory,
+    SUM(f.SalesAmount) AS Revenue
+FROM FACT_InternetSales f
+JOIN DIM_Products p ON f.ProductKey = p.ProductKey
+GROUP BY p.Category, p.SubCategory
+ORDER BY Revenue DESC;
+GO
+
+-- VIEW 5: Sales by City = London Top
+CREATE VIEW VW_SalesByCity AS
+SELECT
+    c.Country,
+    c.City,
+    SUM(f.SalesAmount) AS Revenue
+FROM FACT_InternetSales f
+JOIN DIM_Customers c ON f.CustomerKey = c.CustomerKey
+GROUP BY c.Country, c.City
+ORDER BY Revenue DESC;
+GO
+
+-- VIEW 6: Sales by Month = December Peak
+CREATE VIEW VW_SalesByMonth AS
+SELECT
+    d.[Year],
+    d.MonthName,
+    d.[Month],
+    SUM(f.SalesAmount) AS Revenue
+FROM FACT_InternetSales f
+JOIN DIM_Date d ON f.DateKey = d.DateKey
+GROUP BY d.[Year], d.MonthName, d.[Month]
+ORDER BY d.[Year], d.[Month];
+GO
+
+-- VIEW 7: Sales by Gender
+CREATE VIEW VW_SalesByGender AS
+SELECT
+    c.Gender,
+    SUM(f.SalesAmount) AS Revenue
+FROM FACT_InternetSales f
+JOIN DIM_Customers c ON f.CustomerKey = c.CustomerKey
+GROUP BY c.Gender;
+GO
+
+PRINT 'Data Warehouse Setup Complete!'
+PRINT 'Next Step: Run Python ETL to Load Data, then Connect Power BI to these Views'

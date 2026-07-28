@@ -1,7 +1,7 @@
 /***************************************************
   PROJECT: End-to-End Sales Data Warehouse
   DATABASE: AdventureWorksDW
-  TABLES: 3 DIM + 2 FACT + VIEWS for KPIs
+  TABLES: 3 DIM + 2 FACT + 7 KPI VIEWS
 ***************************************************/
 
 -- STEP 1: CREATE DATABASE
@@ -15,7 +15,7 @@ GO
 USE AdventureWorksDW;
 GO
 
--- STEP 2: DROP TABLES IF EXISTS - Clean Run ke liye
+-- STEP 2: DROP TABLES IF EXISTS
 DROP TABLE IF EXISTS FACT_InternetSales;
 DROP TABLE IF EXISTS FACT_Budget;
 DROP TABLE IF EXISTS DIM_Customers;
@@ -80,7 +80,7 @@ CREATE TABLE FACT_Budget (
 );
 GO
 
--- STEP 5: ADD FOREIGN KEYS / RELATIONSHIPS
+-- STEP 5: ADD FOREIGN KEYS / RELATIONSHIPS - Star Schema
 PRINT 'Adding Relationships...'
 
 ALTER TABLE FACT_InternetSales WITH CHECK
@@ -104,11 +104,10 @@ ADD CONSTRAINT FK_Budget_DIMProduct FOREIGN KEY (ProductKey) REFERENCES DIM_Prod
 GO
 
 /***************************************************
-  STEP 6: KPI QUERIES & VIEWS FOR POWER BI
-  Inko Power BI me "Get Data > SQL Query" me daal
+  STEP 6: KPI VIEWS FOR POWER BI DASHBOARD
 ***************************************************/
 
--- VIEW 1: Core KPIs Dashboard
+-- VIEW 1: Core KPIs = $6.8M Revenue, 2K Orders
 CREATE VIEW VW_CoreKPIs AS
 SELECT
     SUM(SalesAmount) AS TotalRevenue,
@@ -192,4 +191,4 @@ GROUP BY c.Gender;
 GO
 
 PRINT 'Data Warehouse Setup Complete!'
-PRINT 'Next Step: Run Python ETL to Load Data, then Connect Power BI to these Views'
+PRINT 'Next Step: Run Python ETL to Load Data'

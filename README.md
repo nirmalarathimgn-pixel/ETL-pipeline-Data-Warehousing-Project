@@ -1,299 +1,347 @@
-# 🏗️ Data Warehousing & ETL Pipeline for Business Intelligence
+🚀 ETL Pipeline & Data Warehouse Analytics Project
 
-## 📌 Project Overview
+📊 End-to-End Data Engineering & Business Intelligence Solution using ETL Processes, Star Schema Data Warehouse Design, Data Modeling, and Power BI Reporting.
 
-Organizations generate large volumes of data from multiple operational systems, making reporting and analysis difficult due to fragmented, inconsistent, and duplicated information.
+📌 Project Overview
 
-This project demonstrates the design and implementation of a complete Data Warehousing and ETL (Extract, Transform, Load) Pipeline solution that transforms raw retail business data into a centralized analytics platform for reporting, monitoring, and strategic decision-making.
+This project demonstrates the complete lifecycle of a modern Data Warehouse solution:
 
-Using SQL, Python, and Power BI, the project automates data preparation, develops a dimensional data warehouse model, and delivers interactive dashboards for business intelligence.
+✅ Data Extraction from multiple sources
 
----
+✅ Data Cleaning & Transformation
 
-## 🎯 Business Problem
+✅ Data Warehouse Development
 
-Retail organizations often face challenges such as:
+✅ Star Schema Data Modeling
 
-* Data stored across multiple systems
-* Duplicate and inconsistent records
-* Slow reporting processes
-* Poor data quality
-* Lack of centralized analytics
+✅ Fact & Dimension Table Design
 
-The goal of this project is to establish a reliable Data Warehouse that acts as a single source of truth for business reporting and decision-making.
+✅ KPI Development using DAX
 
----
+✅ Interactive Business Intelligence Dashboards
 
-## 🏗️ Solution Architecture
+The project enables organizations to transform raw transactional data into meaningful business insights for strategic decision-making.
 
-Raw Data Sources
+🎯 Business Objective
 
-↓
+The objective of this project is to:
 
-Extract
+Build a scalable Data Warehouse
+Centralize sales and customer data
+Improve reporting efficiency
+Enable faster business decisions
+Provide a single source of truth for analytics
 
-↓
+🏗️ Data Warehouse Architecture
+Data Sources
+     │
+     ▼
+ETL Pipeline
+(Extract → Transform → Load)
+     │
+     ▼
+Data Warehouse
+(Star Schema)
+     │
+     ▼
+Power BI Dashboard
+     │
+     ▼
+Business Insights
+🔄 ETL Process
+1️⃣ Extract
 
-Transform
+Data collected from:
 
-↓
+Sales Data
+Customer Data
+Product Data
+Budget Data
+Calendar Data
+Extracted Fields
+Customer Information
+Product Information
+Sales Transactions
+Budget Data
+Date Information
+2️⃣ Transform
 
-Load
+Performed using Power Query:
 
-↓
+Data Cleaning
+Removed Null Values
+Removed Duplicate Records
+Corrected Data Types
+Standardized Formats
+Created Business Rules
+Data Transformation
+Generated Surrogate Keys
+Created Customer Segments
+Built Date Hierarchies
+Derived Business Metrics
+Aggregated Data
+3️⃣ Load
+
+Loaded transformed data into:
 
 Data Warehouse
 
-↓
+Fact Tables
+
+FACT_InternetSales
+FACT_Budget
+
+Dimension Tables
+
+DIM_Calendar
+DIM_Customers
+DIM_Products
+⭐ Star Schema Design
+
+The Data Warehouse follows a Star Schema architecture.
+
+                DIM_Calendar
+                      │
+                      │
+DIM_Customers ── FACT_InternetSales ── DIM_Products
+                      │
+                      │
+                 FACT_Budget
+Benefits
+
+✅ Faster Query Performance
+
+✅ Better Scalability
+
+✅ Optimized Reporting
+
+✅ Simplified Data Relationships
+
+✅ Industry Standard Design
+
+📊 Fact Tables
+FACT_InternetSales
+
+Stores transactional sales data.
+
+Columns
+CustomerKey
+ProductKey
+OrderDateKey
+DueDateKey
+ShipDateKey
+SalesAmount
+SalesOrderNumber
+Purpose
+Revenue Analysis
+Order Tracking
+Product Performance
+Customer Analytics
+FACT_Budget
+
+Stores business targets and budget information.
+
+Columns
+Date
+Budget
+Purpose
+Budget Tracking
+Variance Analysis
+Performance Monitoring
+📋 Dimension Tables
+DIM_Customers
+
+Contains customer-related information.
+
+Columns
+CustomerKey
+FirstName
+LastName
+FullName
+Gender
+CustomerCity
+DateFirstPurchase
+Purpose
+Customer Segmentation
+Customer Analysis
+Geographic Reporting
+DIM_Products
+
+Contains product master data.
+
+Columns
+ProductKey
+ProductName
+ProductCategory
+ProductSubcategory
+ProductModelName
+ProductColor
+ProductSize
+ProductLine
+ProductStatus
+ProductDescription
+ProductItemCode
+Purpose
+Product Analytics
+Category Analysis
+Inventory Insights
+DIM_Calendar
+
+Contains date-related attributes.
 
-Fact & Dimension Tables
+Columns
+Date
+Year
+Quarter
+Month
+MonthShort
+MonthNumber
+Week
+WeekNumber
+Purpose
+Time Intelligence
+Monthly Analysis
+Quarterly Reporting
+Trend Analysis
+📈 Key KPIs
+Total Revenue =
+SUM(FACT_InternetSales[SalesAmount])
 
-↓
+Total Orders =
+DISTINCTCOUNT(
+FACT_InternetSales[SalesOrderNumber]
+)
 
-Power BI Dashboard
+Average Selling Price =
+DIVIDE(
+[Total Revenue],
+[Total Orders]
+)
 
-↓
+Budget Amount =
+SUM(FACT_Budget[Budget])
 
-Business Insights
+Budget Achievement % =
+DIVIDE(
+[Total Revenue],
+[Budget Amount]
+)
 
----
+Revenue Variance =
+[Total Revenue] -
+[Budget Amount]
+📊 Power BI Dashboards
+Sales Overview
 
-## 🛠️ Technology Stack
+📈 Revenue Trends
 
-| Technology | Purpose                                |
-| ---------- | -------------------------------------- |
-| SQL        | ETL Logic & Data Warehouse Development |
-| Python     | Data Cleaning & Automation             |
-| Pandas     | Data Transformation                    |
-| NumPy      | Data Processing                        |
-| Power BI   | Dashboard Development                  |
-| GitHub     | Version Control & Documentation        |
+💰 Budget vs Actual
 
----
+🏆 Top Products
 
-## 📂 Repository Structure
+👥 Top Customers
 
-Data-Warehousing-and-ETL-Pipeline-for-Business-Intelligence
+🌍 City Performance
 
-├── README.md
+Customer Analytics
 
-├── data
-│ ├── customers.csv
-│ ├── products.csv
-│ ├── sales.csv
-│ └── cleaned_data.csv
+👤 Customer Segmentation
 
-├── sql
-│ ├── create_tables.sql
-│ ├── etl_pipeline.sql
-│ └── warehouse_queries.sql
+🚻 Gender Analysis
 
-├── python
-│ ├── data_cleaning.py
-│ └── etl_automation.py
+🌍 Geographic Distribution
 
-├── dashboard
-│ └── Data_Warehouse_Dashboard.pbix
+💵 High-Value Customers
 
-├── images
-│ ├── store_sales_dashboard.png
-│ └── strategy_dashboard.png
+Product Analytics
 
-└── reports
-│ └── project_summary.pdf
+📦 Category Performance
 
----
+📊 Subcategory Trends
 
-## 🔄 ETL Pipeline
+🏆 Best-Selling Products
 
-### Extract
+📈 Revenue Contribution
 
-Collected raw business data from:
+Executive Insights
 
-* Customer Data
-* Product Data
-* Sales Data
+🎯 Budget Achievement
 
-### Transform
+🏆 Top Revenue Category
 
-Performed:
+🌍 Top Revenue City
 
-* Missing Value Handling
-* Duplicate Removal
-* Data Validation
-* Data Type Conversion
-* Revenue Calculation
-* Data Standardization
+📅 Best Performing Month
 
-### Load
+📊 Strategic Business Recommendations
 
-Loaded processed data into a Data Warehouse using a dimensional model.
+🔍 Business Insights Generated
+Revenue Insights
+Revenue peaks during December.
+February shows the lowest performance.
+Revenue trends reveal seasonal demand patterns.
+Customer Insights
+High-value customers contribute the majority of sales.
+Customer concentration drives significant revenue.
+Product Insights
+Bikes are the highest revenue-generating category.
+Road Bikes contribute the largest revenue share.
+Regional Insights
+London is the highest-performing city.
+A few cities generate most of the revenue.
+🛠️ Skills Demonstrated
+Data Engineering
 
-### Dimension Tables
+✔ ETL Development
 
-* DimCustomer
-* DimProduct
+✔ Data Warehousing
 
-### Fact Table
+✔ Data Modeling
 
-* FactSales
+✔ Star Schema Design
 
----
+✔ Data Integration
 
-## ⭐ Data Warehouse Design
+✔ Data Transformation
 
-### Star Schema
+Power BI
 
-FactSales
+✔ Power Query
 
-↙ ↓ ↘
+✔ DAX
 
-DimCustomer     DimProduct
+✔ KPI Development
 
-The Star Schema structure improves query performance and enables efficient reporting and analytics.
+✔ Dashboard Design
 
----
+✔ Interactive Reporting
 
-## 📊 Dashboard Pages
+✔ Data Visualization
 
-### 1️⃣ Store Sales Dashboard
+Analytics
 
-Provides a comprehensive overview of retail sales performance across stores and product categories.
+✔ Business Intelligence
 
-#### KPIs
+✔ Revenue Analysis
 
-* Total Revenue
-* Total Orders
-* Total Customers
-* Average Order Value (AOV)
+✔ Customer Analytics
 
-#### Visuals
+✔ Product Analytics
 
-* Monthly Sales Trend
-* Revenue by Product Category
-* Top Performing Products
-* Store-wise Sales Performance
-* Regional Sales Distribution
-* Customer Purchase Analysis
+✔ Budget Analysis
 
----
+✔ Executive Reporting
 
-### 2️⃣ Strategy Dashboard
+🚀 Project Outcome
 
-Provides strategic business insights for management and decision-making.
+✅ Built a scalable Data Warehouse
 
-#### KPIs
+✅ Implemented ETL Pipeline
 
-* Revenue Growth
-* Customer Growth
-* Top Revenue Categories
-* High Value Customers
+✅ Designed Star Schema Model
 
-#### Visuals
+✅ Improved Reporting Efficiency
 
-* Customer Segmentation Analysis
-* Revenue Contribution by Category
-* Product Performance Matrix
-* Regional Growth Analysis
-* Strategic Business KPIs
-* Performance Trend Analysis
+✅ Enabled Self-Service Analytics
 
----
-
-## 🧮 SQL Analysis Performed
-
-* Data Warehouse Creation
-* ETL Pipeline Development
-* Revenue Analysis
-* Product Performance Analysis
-* Customer Analysis
-* Regional Analysis
-* KPI Development
-* Customer Ranking
-* Sales Trend Analysis
-
----
-
-## 🐍 Python Analysis Performed
-
-### Data Cleaning
-
-* Missing Value Treatment
-* Duplicate Removal
-* Data Validation
-
-### Data Transformation
-
-* Revenue Calculation
-* Feature Engineering
-* Dataset Preparation
-
-### Automation
-
-* Automated ETL Processing
-* CSV Handling
-* Data Export
-
-### Visualization
-
-* Revenue Trends
-* Customer Analysis
-* Product Analysis
-* Regional Performance
-
----
-
-## 📈 Key Business Insights
-
-* A small group of products contributes a significant portion of total revenue.
-* High-performing stores consistently drive overall business growth.
-* Customer purchasing behavior differs across regions and product categories.
-* Strategic analysis highlights growth opportunities in underperforming markets.
-* Centralized data warehousing improves reporting consistency and decision-making.
-* Automated ETL processes reduce manual effort and improve data quality.
-* Business leaders can track performance through a single source of truth.
-* Data-driven insights support better operational and strategic planning.
-
----
-
-## 📷 Dashboard Preview
-
-### Store Sales Dashboard
-
-![Store Sales Dashboard](images/store_sales_dashboard.png)
-
-### Strategy Dashboard
-
-![Strategy Dashboard](images/strategy_dashboard.png)
-
----
-
-## 🚀 Business Impact
-
-* Improved reporting efficiency through automated ETL pipelines.
-* Established a centralized Data Warehouse for analytics.
-* Enhanced data quality and consistency across reports.
-* Enabled faster business decision-making through interactive dashboards.
-* Delivered actionable insights for sales optimization and business growth.
-
----
-
-## 🎓 Skills Demonstrated
-
-* ETL Pipeline Development
-* Data Warehousing
-* SQL Programming
-* Star Schema Design
-* Data Modeling
-* Data Cleaning
-* Python Automation
-* Business Intelligence
-* KPI Development
-* Power BI Dashboarding
-* Business Analytics
-
----
-
-## ⭐ Project Outcome
-
-Successfully designed and implemented an end-to-end Data Warehousing & ETL Pipeline solution that transforms raw retail data into actionable business intelligence through automated data processing, dimensional modeling, and interactive Power BI dashboards.
+✅ Delivered Actionable Business Insights

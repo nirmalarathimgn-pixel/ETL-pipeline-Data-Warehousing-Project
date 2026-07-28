@@ -1,4 +1,4 @@
-🚀 ETL Pipeline & Data Warehouse Analytics Project
+🚀 ETL Pipeline & Data Warehouse Analytics Project 
 
 📊 End-to-End Data Engineering & Business Intelligence Solution using ETL Processes, Star Schema Data Warehouse Design, Data Modeling, and Power BI Reporting.
 

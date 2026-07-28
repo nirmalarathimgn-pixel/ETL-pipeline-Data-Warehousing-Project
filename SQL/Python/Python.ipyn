@@ -1,0 +1,66 @@
+import pandas as pd
+from sqlalchemy import create_engine
+
+print("--- ETL PIPELINE STARTED ---")
+
+# 1. CONFIG
+SERVER = 'LAPTOP-XXXX\\SQLEXPRESS'  # Apna server name daalna
+DATABASE = 'AdventureWorksDW'
+DRIVER = 'ODBC Driver 17 for SQL Server'
+CONNECTION_STRING = f'mssql+pyodbc://@{SERVER}/{DATABASE}?driver={DRIVER}&Trusted_Connection=yes'
+engine = create_engine(CONNECTION_STRING)
+
+# 2. EXTRACT
+print("1. Extracting Data...")
+customers = pd.read_csv('data/raw_customers.csv')
+products = pd.read_csv('data/raw_products.csv')
+sales = pd.read_csv('data/raw_sales.csv')
+budget = pd.read_csv('data/raw_budget.csv')
+
+# 3. TRANSFORM
+print("2. Transforming Data...")
+
+# Convert Dates First
+sales['OrderDate'] = pd.to_datetime(sales['OrderDate'])
+budget['Date'] = pd.to_datetime(budget['Date'])
+
+# A. DIM_Customers - BUG FIXED HERE
+DIM_Customers = customers[['CustomerKey', 'CustomerID', 'FirstName', 'LastName', 'Gender', 'City', 'Country']].copy()
+DIM_Customers['FullName'] = DIM_Customers['FirstName'] + ' + DIM_Customers['LastName'] # FIXED
+DIM_Customers = DIM_Customers.drop(['FirstName', 'LastName'], axis=1)
+DIM_Customers = DIM_Customers.drop_duplicates().fillna('Unknown')
+
+# B. DIM_Products
+DIM_Products = products[['ProductKey', 'ProductID', 'ProductName', 'Category', 'SubCategory']].copy()
+DIM_Products = DIM_Products.drop_duplicates().fillna('N/A')
+
+# C. DIM_Date
+date_list = pd.date_range(start=sales['OrderDate'].min(), end=sales['OrderDate'].max())
+DIM_Date = pd.DataFrame({'Date': date_list})
+DIM_Date['DateKey'] = DIM_Date['Date'].dt.strftime('%Y%m%d').astype(int)
+DIM_Date['Year'] = DIM_Date['Date'].dt.year
+DIM_Date['Month'] = DIM_Date['Date'].dt.month
+DIM_Date['MonthName'] = DIM_Date['Date'].dt.month_name()
+DIM_Date['Quarter'] = DIM_Date['Date'].dt.quarter
+
+# D. FACT_InternetSales
+sales['DateKey'] = sales['OrderDate'].dt.strftime('%Y%m%d').astype(int)
+sales['SalesAmount'] = sales['OrderQuantity'] * sales['UnitPrice']
+FACT_InternetSales = sales[['SalesOrderNumber', 'DateKey', 'CustomerKey', 'ProductKey', 'OrderQuantity', 'SalesAmount']].copy()
+FACT_InternetSales = FACT_InternetSales.fillna(0)
+
+# E. FACT_Budget
+budget['DateKey'] = budget['Date'].dt.strftime('%Y%m%d').astype(int)
+FACT_Budget = budget[['DateKey', 'ProductKey', 'BudgetAmount']].copy()
+FACT_Budget = FACT_Budget.fillna(0)
+
+print("3. Loading Data to SQL Server...")
+# 4. LOAD
+DIM_Customers.to_sql('DIM_Customers', engine, if_exists='replace', index=False)
+DIM_Products.to_sql('DIM_Products', engine, if_exists='replace', index=False)
+DIM_Date.to_sql('DIM_Date', engine, if_exists='replace', index=False)
+FACT_InternetSales.to_sql('FACT_InternetSales', engine, if_exists='replace', index=False)
+FACT_Budget.to_sql('FACT_Budget', engine, if_exists='replace', index=False)
+
+print("--- ETL PIPELINE COMPLETED SUCCESSFULLY ---")
+print(f"Rows Loaded: Sales={len(FACT_InternetSales)}, Customers={len(DIM_Customers)}")
